@@ -9,8 +9,8 @@ const log = console.log;
 const http = require('http');
 const https = require('https');
 
-const DISCORD_GUILD = Number(process.env.DISCORD_GUILD);
-const DISCORD_CHANNEL = Number(process.env.DISCORD_CHANNEL);
+const DISCORD_GUILD = String(process.env.DISCORD_GUILD);
+const DISCORD_CHANNEL = String(process.env.DISCORD_CHANNEL);
 const HOST = String(process.env.HOST) || 'localhost';
 const PORT = Number(process.env.PORT) || 37405; //unused port and since now the OFFICIAL ttt_discord_bot port ;)
 const KEEPALIVE_HOST = String(process.env.KEEPALIVE_HOST) || HOST;
@@ -39,10 +39,10 @@ client.login(process.env.DISCORD_TOKEN);
 
 client.on('ready', () => {
   log('Bot is ready to mute them all! :)');
-  guild = client.guilds.get(String(DISCORD_GUILD));
-  // guild = client.guilds.find('id', String(DISCORD_GUILD));
-  channel = guild.channels.get(String(DISCORD_CHANNEL));
-  // channel = guild.channels.find('id', String(DISCORD_CHANNEL));
+  guild = client.guilds.get(DISCORD_GUILD);
+  // guild = client.guilds.find('id', DISCORD_GUILD);
+  channel = guild.channels.get(DISCORD_CHANNEL);
+  // channel = guild.channels.find('id', DISCORD_CHANNEL);
 });
 client.on('voiceStateUpdate', (oldMember, newMember) => { //player leaves the ttt-channel
   if (oldMember.voiceChannel != newMember.voiceChannel && isMemberInVoiceChannel(oldMember)) {
