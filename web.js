@@ -9,13 +9,13 @@ const log = console.log;
 const http = require('http');
 const https = require('https');
 
-const DISCORD_GUILD = process.env.DISCORD_GUILD;
-const DISCORD_CHANNEL = process.env.DISCORD_CHANNEL;
-const HOST = process.env.HOST || 'localhost';
-const PORT = process.env.PORT || 37405; //unused port and since now the OFFICIAL ttt_discord_bot port ;)
-const KEEPALIVE_HOST = process.env.KEEPALIVE_HOST || HOST;
-const KEEPALIVE_PORT = process.env.KEEPALIVE_PORT || PORT;
-const KEEPALIVE_ENABLED = (process.env.KEEPALIVE_ENABLED == 1) || false;
+const DISCORD_GUILD = Number(process.env.DISCORD_GUILD);
+const DISCORD_CHANNEL = Number(process.env.DISCORD_CHANNEL);
+const HOST = String(process.env.HOST) || 'localhost';
+const PORT = Number(process.env.PORT) || 37405; //unused port and since now the OFFICIAL ttt_discord_bot port ;)
+const KEEPALIVE_HOST = String(process.env.KEEPALIVE_HOST) || HOST;
+const KEEPALIVE_PORT = Number(process.env.KEEPALIVE_PORT) || PORT;
+const KEEPALIVE_ENABLED = Boolean(process.env.KEEPALIVE_ENABLED == 1) || false;
 
 log('Constants: ');
 log("  DISCORD_GUILD: ", DISCORD_GUILD, `(${typeof DISCORD_GUILD})`);
