@@ -144,12 +144,11 @@ const keepAliveReq = () => {
     path: '/',
     headers: {
       req: "keep_alive"
-    },
-    method: 'GET',
+    }
     timeout: 5 * 1000 // 5 second request timeout.
   };
-  log('[KeepAlive] Requesting:', url, 'with options:', options);
-  https.request(url, options, (res) => {
+  log('[KeepAlive] Requesting:', 'with options:', options);
+  https.get(options, (res) => {
     res.on('data', (chunk) => {
       try {
         log('[KeepAlive] Success!');
