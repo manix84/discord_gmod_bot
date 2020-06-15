@@ -1,6 +1,6 @@
-import { Client } from 'discord.js';
-import { createServer } from 'http';
-import { get } from 'https';
+const Discord = require('discord.js');
+const http = require('http');
+const https = require('https');
 
 const DEBUG = Boolean(process.env.DEBUG == 1);
 const PORT = Number(process.env.PORT) || 37405; //unused port and since now the OFFICIAL ttt_discord_bot port ;)
@@ -30,7 +30,7 @@ const mutedPlayers = {};
 const requests = [];
 
 //create discord client
-const client = new Client();
+const client = new Discord.Client();
 client.login(process.env.DISCORD_TOKEN);
 
 client.on('ready', () => {
@@ -161,7 +161,7 @@ const keepAliveReq = () => {
     'Requesting',
     options
   );
-  get(options, (res) => {
+  https.get(options, (res) => {
     const { statusCode } = res;
     if (statusCode === 200) {
       log(
@@ -180,7 +180,7 @@ const keepAliveReq = () => {
 };
 
 
-createServer((req, res) => {
+http.createServer((req, res) => {
   if (typeof req.headers.params === 'string' && typeof req.headers.req === 'string' && typeof requests[req.headers.req] === 'function') {
     try {
       let params = JSON.parse(req.headers.params);
