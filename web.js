@@ -1,28 +1,26 @@
 const Discord = require('discord.js');
-// const config = require('./config.json') || {
-const config = {
-  discord: {},
-  server: {},
-  keepAlive: {}
-};
-const log = console.log;
 const http = require('http');
 const https = require('https');
 
+const DEBUG = Boolean(process.env.DEBUG == 1);
+const PORT = Number(process.env.PORT) || 37405; //unused port and since now the OFFICIAL ttt_discord_bot port ;)
 const DISCORD_GUILD = String(process.env.DISCORD_GUILD);
 const DISCORD_CHANNEL = String(process.env.DISCORD_CHANNEL);
-const PORT = Number(process.env.PORT) || 37405; //unused port and since now the OFFICIAL ttt_discord_bot port ;)
 const KEEPALIVE_HOST = String(process.env.KEEPALIVE_HOST);
 const KEEPALIVE_PORT = Number(process.env.KEEPALIVE_PORT) || PORT;
-const KEEPALIVE_ENABLED = Boolean(process.env.KEEPALIVE_ENABLED == 1) || false;
+const KEEPALIVE_ENABLED = Boolean(process.env.KEEPALIVE_ENABLED == 1);
+
+const log = (...msg) => (DEBUG ? console.log(msg) : () => {});
 
 log('Constants: ');
+log("  DEBUG: ", DEBUG, `(${typeof DEBUG})`);
+log("  PORT: ", PORT, `(${typeof PORT})`);
 log("  DISCORD_GUILD: ", DISCORD_GUILD, `(${typeof DISCORD_GUILD})`);
 log("  DISCORD_CHANNEL: ", DISCORD_CHANNEL, `(${typeof DISCORD_CHANNEL})`);
-log("  PORT: ", PORT, `(${typeof PORT})`);
 log("  KEEPALIVE_HOST: ", KEEPALIVE_HOST, `(${typeof KEEPALIVE_HOST})`);
 log("  KEEPALIVE_PORT: ", KEEPALIVE_PORT, `(${typeof KEEPALIVE_PORT})`);
 log("  KEEPALIVE_ENABLED: ", KEEPALIVE_ENABLED, `(${typeof KEEPALIVE_ENABLED})`);
+
 
 let guild;
 let channel;
@@ -143,24 +141,30 @@ const keepAliveReq = () => {
     port: KEEPALIVE_PORT,
     path: '/keep_alive',
     headers: {
-      req: "keep_alive"
+      req: 'keep_alive'
     },
     timeout: 5 * 1000 // 5 second request timeout.
   };
-  log('[KeepAlive] Requesting:', 'with options:', options);
+  log(
+    '[KeepAlive]',
+    '[Requesting]',
+    options
+  );
   https.get(options, (res) => {
-    res.on('data', (chunk) => {
-      try {
-        log('[KeepAlive] Success!');
-        log('[KeepAlive] Response: ' + chunk);// disable after it's working
-      } catch (err) {
-        log(err.message);
-      }
-    });
-  }).on('timeout', (e) => {
-  }).on('error', (err) => {
-    log('[KeepAlive] Error Message:', err.message);
-    log('[KeepAlive] Error:', err)
+    const { statusCode } = res;
+    if (statusCode === 200) {
+      log(
+        '[KeepAlive]',
+        '[Success]',
+        `Request successful`
+      );
+    } else {
+      log(
+        '[KeepAlive]',
+        '[Error]',
+        `Request Failed Status Code: ${statusCode}`
+      );
+    }
   });
 };
 
@@ -181,9 +185,13 @@ http.createServer((req, res) => {
   log(`Bot endpoint is running: https://${KEEPALIVE_HOST}:${KEEPALIVE_PORT}`);
 
   if (KEEPALIVE_ENABLED) {
-    log(`[KeepAlive] Starting.`);
+    log(
+      '[KeepAlive]',
+      '[Startup]',
+      'Initialisation'
+    );
 
     setInterval(keepAliveReq, 20 * 60 * 1000); // load every 20 minutes
-    setTimeout(keepAliveReq, 10 * 1000); // load first attempt after 10 seconds.
+    setTimeout(keepAliveReq, 3 * 1000); // load first attempt after 3 seconds.
   }
 });
