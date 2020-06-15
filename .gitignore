@@ -1,0 +1,4 @@
+discord_bot/node_modules/
+discord_bot/package-lock.json
+discord_bot/config.json
+.vscode/
