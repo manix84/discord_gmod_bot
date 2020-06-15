@@ -9,13 +9,13 @@ const log = console.log;
 const http = require('http');
 const https = require('https');
 
-const DISCORD_GUILD = config.discord.guild || process.env.DISCORD_GUILD;
-const DISCORD_CHANNEL = config.discord.channel || process.env.DISCORD_CHANNEL;
-const HOST = config.server.host || process.env.HOST || 'localhost';
-const PORT = config.server.port || process.env.PORT || 37405; //unused port and since now the OFFICIAL ttt_discord_bot port ;)
-const KEEPALIVE_HOST = config.keepAlive.host || process.env.KEEPALIVE_HOST || HOST;
-const KEEPALIVE_PORT = config.keepAlive.port || process.env.KEEPALIVE_PORT || PORT;
-const KEEPALIVE_ENABLED = config.keepAlive.enabled || process.env.KEEPALIVE_ENABLED || false;
+const DISCORD_GUILD = process.env.DISCORD_GUILD;
+const DISCORD_CHANNEL = process.env.DISCORD_CHANNEL;
+const HOST = process.env.HOST || 'localhost';
+const PORT = process.env.PORT || 37405; //unused port and since now the OFFICIAL ttt_discord_bot port ;)
+const KEEPALIVE_HOST = process.env.KEEPALIVE_HOST || HOST;
+const KEEPALIVE_PORT = process.env.KEEPALIVE_PORT || PORT;
+const KEEPALIVE_ENABLED = (process.env.KEEPALIVE_ENABLED == 1) || false;
 
 log('Constants: ');
 log("  DISCORD_GUILD: ", DISCORD_GUILD, `(${typeof DISCORD_GUILD})`);
