@@ -11,16 +11,14 @@ const https = require('https');
 
 const DISCORD_GUILD = String(process.env.DISCORD_GUILD);
 const DISCORD_CHANNEL = String(process.env.DISCORD_CHANNEL);
-const HOST = String(process.env.HOST) || 'localhost';
 const PORT = Number(process.env.PORT) || 37405; //unused port and since now the OFFICIAL ttt_discord_bot port ;)
-const KEEPALIVE_HOST = String(process.env.KEEPALIVE_HOST) || HOST;
+const KEEPALIVE_HOST = String(process.env.KEEPALIVE_HOST);
 const KEEPALIVE_PORT = Number(process.env.KEEPALIVE_PORT) || PORT;
 const KEEPALIVE_ENABLED = Boolean(process.env.KEEPALIVE_ENABLED == 1) || false;
 
 log('Constants: ');
 log("  DISCORD_GUILD: ", DISCORD_GUILD, `(${typeof DISCORD_GUILD})`);
 log("  DISCORD_CHANNEL: ", DISCORD_CHANNEL, `(${typeof DISCORD_CHANNEL})`);
-log("  HOST: ", HOST, `(${typeof HOST})`);
 log("  PORT: ", PORT, `(${typeof PORT})`);
 log("  KEEPALIVE_HOST: ", KEEPALIVE_HOST, `(${typeof KEEPALIVE_HOST})`);
 log("  KEEPALIVE_PORT: ", KEEPALIVE_PORT, `(${typeof KEEPALIVE_PORT})`);
