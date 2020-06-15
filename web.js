@@ -10,7 +10,7 @@ const KEEPALIVE_HOST = String(process.env.KEEPALIVE_HOST);
 const KEEPALIVE_PORT = Number(process.env.KEEPALIVE_PORT) || PORT;
 const KEEPALIVE_ENABLED = Boolean(process.env.KEEPALIVE_ENABLED == 1);
 
-const log = (...msg) => (DEBUG ? console.log(msg) : () => {});
+const log = (...msg) => (DEBUG ? console.log(...msg) : () => {});
 
 log('Constants: ');
 log("  DEBUG: ", DEBUG, `(${typeof DEBUG})`);
