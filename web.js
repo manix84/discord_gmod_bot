@@ -141,7 +141,7 @@ const keepAliveReq = () => {
   const options = {
     host: KEEPALIVE_HOST,
     port: KEEPALIVE_PORT,
-    path: '/',
+    path: '/keep_alive',
     headers: {
       req: "keep_alive"
     },
