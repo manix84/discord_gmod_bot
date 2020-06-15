@@ -39,10 +39,10 @@ client.login(process.env.DISCORD_TOKEN);
 
 client.on('ready', () => {
   log('Bot is ready to mute them all! :)');
-  guild = client.guilds.get(DISCORD_GUILD);
-  // guild = client.guilds.find('id', DISCORD_GUILD);
-  channel = guild.channels.get(DISCORD_CHANNEL);
-  // channel = guild.channels.find('id', DISCORD_CHANNEL);
+  guild = client.guilds.get(String(DISCORD_GUILD));
+  // guild = client.guilds.find('id', String(DISCORD_GUILD));
+  channel = guild.channels.get(String(DISCORD_CHANNEL));
+  // channel = guild.channels.find('id', String(DISCORD_CHANNEL));
 });
 client.on('voiceStateUpdate', (oldMember, newMember) => { //player leaves the ttt-channel
   if (oldMember.voiceChannel != newMember.voiceChannel && isMemberInVoiceChannel(oldMember)) {
