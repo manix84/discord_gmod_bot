@@ -1,6 +1,6 @@
-const Discord = require('discord.js');
-const http = require('http');
-const https = require('https');
+import { Client } from 'discord.js';
+import { createServer } from 'http';
+import { get } from 'https';
 
 const DEBUG = Boolean(process.env.DEBUG == 1);
 const PORT = Number(process.env.PORT) || 37405; //unused port and since now the OFFICIAL ttt_discord_bot port ;)
@@ -22,22 +22,22 @@ log("  KEEPALIVE_PORT: ", KEEPALIVE_PORT, `(${typeof KEEPALIVE_PORT})`);
 log("  KEEPALIVE_ENABLED: ", KEEPALIVE_ENABLED, `(${typeof KEEPALIVE_ENABLED})`);
 
 
-let guild;
-let channel;
+let discordGuild;
+let discordChannel;
 
-const muted = {};
+const mutedPlayers = {};
 
-const get = [];
+const requests = [];
 
 //create discord client
-const client = new Discord.Client();
+const client = new Client();
 client.login(process.env.DISCORD_TOKEN);
 
 client.on('ready', () => {
   log('Bot is ready to mute them all! :)');
-  guild = client.guilds.get(DISCORD_GUILD);
+  discordGuild = client.guilds.get(DISCORD_GUILD);
   // guild = client.guilds.find('id', DISCORD_GUILD);
-  channel = guild.channels.get(DISCORD_CHANNEL);
+  discordChannel = discordGuild.channels.get(DISCORD_CHANNEL);
   // channel = guild.channels.find('id', DISCORD_CHANNEL);
 });
 client.on('voiceStateUpdate', (oldMember, newMember) => { //player leaves the ttt-channel
@@ -49,10 +49,10 @@ client.on('voiceStateUpdate', (oldMember, newMember) => { //player leaves the tt
 });
 
 isMemberInVoiceChannel = (member) => member.voiceChannelID == DISCORD_CHANNEL;
-isMemberMutedByBot = (member) => muted[member] == true;
-setMemberMutedByBot = (member, set = true) => muted[member] = set;
+isMemberMutedByBot = (member) => mutedPlayers[member] == true;
+setMemberMutedByBot = (member, set = true) => mutedPlayers[member] = set;
 
-get['connect'] = (params, ret) => {
+requests['connect'] = (params, ret) => {
   let tag_utf8 = params.tag.split(" ");
   let tag = "";
 
@@ -60,7 +60,7 @@ get['connect'] = (params, ret) => {
     tag = tag + String.fromCharCode(e);
   });
 
-  let found = guild.members.filterArray(val => val.user.tag.match(new RegExp('.*' + tag + '.*')));
+  let found = discordGuild.members.filterArray(val => val.user.tag.match(new RegExp('.*' + tag + '.*')));
   if (found.length > 1) {
     ret({
       answer: 1 //pls specify
@@ -74,19 +74,26 @@ get['connect'] = (params, ret) => {
       tag: found[0].user.tag,
       id: found[0].id
     });
+    log(
+      "[Connect]",
+      `Connecting ${found[0].user.tag} (${found[0].id})`
+    );
   }
 };
 
-get['mute'] = (params, ret) => {
+requests['mute'] = (params, ret) => {
   let id = params.id;
   let mute = params.mute;
   if (typeof id !== 'string' || typeof mute !== 'boolean') {
     ret();
     return;
   }
-  log("Muted: " + id);
+  log(
+    "[Mute]",
+    `Muted ${id}`
+  );
   //let member = guild.members.find('id', id);
-  let member = guild.members.find(user => user.id === id);
+  let member = discordGuild.members.find(user => user.id === id);
 
   if (member) {
 
@@ -129,10 +136,14 @@ get['mute'] = (params, ret) => {
   }
 };
 
-get['keep_alive'] = (params, ret) => {
+requests['keep_alive'] = (params, ret) => {
   ret({
     success: true,
   });
+  log(
+    "[KeepAlive]",
+    `Requested`
+  );
 };
 
 const keepAliveReq = () => {
@@ -147,21 +158,21 @@ const keepAliveReq = () => {
   };
   log(
     '[KeepAlive]',
-    '[Requesting]',
+    'Requesting',
     options
   );
-  https.get(options, (res) => {
+  get(options, (res) => {
     const { statusCode } = res;
     if (statusCode === 200) {
       log(
         '[KeepAlive]',
-        '[Success]',
+        'Success',
         `Request successful`
       );
     } else {
       log(
         '[KeepAlive]',
-        '[Error]',
+        'Error',
         `Request Failed Status Code: ${statusCode}`
       );
     }
@@ -169,11 +180,11 @@ const keepAliveReq = () => {
 };
 
 
-http.createServer((req, res) => {
-  if (typeof req.headers.params === 'string' && typeof req.headers.req === 'string' && typeof get[req.headers.req] === 'function') {
+createServer((req, res) => {
+  if (typeof req.headers.params === 'string' && typeof req.headers.req === 'string' && typeof requests[req.headers.req] === 'function') {
     try {
       let params = JSON.parse(req.headers.params);
-      get[req.headers.req](params, (ret) => res.end(JSON.stringify(ret)));
+      requests[req.headers.req](params, (ret) => res.end(JSON.stringify(ret)));
     } catch (e) {
       res.end('no valid JSON in params');
     }
