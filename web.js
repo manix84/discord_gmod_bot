@@ -140,11 +140,14 @@ get['keep_alive'] = (params, ret) => {
 };
 
 const keepAliveReq = () => {
-  const url = `https://${KEEPALIVE_HOST}:${KEEPALIVE_PORT}/?req=keep_alive`;
+  const url = `https://${KEEPALIVE_HOST}:${KEEPALIVE_PORT}/`;
   const options = {
 //     host: KEEPALIVE_HOST,
 //     port: KEEPALIVE_PORT,
-//     path: '/?req=keep_alive',
+//     path: '/',
+    headers: {
+      req: "keep_alive"
+    },
     method: 'GET',
     timeout: 5 * 1000 // 5 second request timeout.
   };
