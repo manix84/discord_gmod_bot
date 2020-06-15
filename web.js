@@ -144,7 +144,7 @@ const keepAliveReq = () => {
     path: '/',
     headers: {
       req: "keep_alive"
-    }
+    },
     timeout: 5 * 1000 // 5 second request timeout.
   };
   log('[KeepAlive] Requesting:', 'with options:', options);
