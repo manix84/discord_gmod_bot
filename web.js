@@ -155,7 +155,7 @@ const keepAliveReq = () => {
     path: '/keep_alive',
     headers: {
       req: 'keep_alive',
-      authorization: API_KEY
+      Authorization: API_KEY
     },
     timeout: 5 * 1000 // 5 second request timeout.
   };
