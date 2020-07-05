@@ -1,4 +1,6 @@
-# Discord for GMod (The Node Bot) ![Icon](https://raw.githubusercontent.com/manix84/discord_gmod_bot/master/images/icon/icon_64x.png)
+# Discord for GMod (The Node Bot)
+
+![Icon](https://raw.githubusercontent.com/manix84/discord_gmod_addon/master/images/icon/icon_128x.png)
 
 >Dead players tell no tales!
 
