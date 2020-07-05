@@ -9,6 +9,7 @@ const DISCORD_CHANNEL = String(process.env.DISCORD_CHANNEL);
 const KEEPALIVE_HOST = String(process.env.KEEPALIVE_HOST);
 const KEEPALIVE_PORT = Number(process.env.KEEPALIVE_PORT) || PORT;
 const KEEPALIVE_ENABLED = Boolean(process.env.KEEPALIVE_ENABLED == 1);
+const API_KEY = String(process.env.API_KEY) || false;
 
 const log = (...msg) => (DEBUG ? console.log(...msg) : () => {});
 
@@ -20,6 +21,7 @@ log("  DISCORD_CHANNEL: ", DISCORD_CHANNEL, `(${typeof DISCORD_CHANNEL})`);
 log("  KEEPALIVE_HOST: ", KEEPALIVE_HOST, `(${typeof KEEPALIVE_HOST})`);
 log("  KEEPALIVE_PORT: ", KEEPALIVE_PORT, `(${typeof KEEPALIVE_PORT})`);
 log("  KEEPALIVE_ENABLED: ", KEEPALIVE_ENABLED, `(${typeof KEEPALIVE_ENABLED})`);
+log("  API_KEY: ", API_KEY, `(${typeof API_KEY})`);
 
 
 let discordGuild;
@@ -179,17 +181,29 @@ const keepAliveReq = () => {
   });
 };
 
-
 http.createServer((req, res) => {
-  if (typeof req.headers.params === 'string' && typeof req.headers.req === 'string' && typeof requests[req.headers.req] === 'function') {
+  if (
+    typeof req.headers.params === 'string' &&
+    typeof req.headers.req === 'string' &&
+    typeof requests[req.headers.req] === 'function'
+  ) {
     try {
       let params = JSON.parse(req.headers.params);
-      requests[req.headers.req](params, (ret) => res.end(JSON.stringify(ret)));
+      if (req.headers.authorization) {
+        log(`Authorization: ${req.headers.authorization}`);
+      }
+      requests[req.headers.req](
+        params,
+        (ret) => res.end(
+          JSON.stringify(ret)
+        )
+      );
     } catch (e) {
       res.end('no valid JSON in params');
     }
-  } else
+  } else {
     res.end();
+  }
 }).listen({
   port: PORT
 }, () => {
