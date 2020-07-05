@@ -183,20 +183,6 @@ const keepAliveReq = () => {
 };
 
 http.createServer((req, res) => {
-  log(
-    '[Request]',
-    '[Headers]',
-    req.headers
-  );
-  log(
-    '[Request]',
-    "Authorised:",
-    (typeof API_KEY === 'string' && req.headers.authorization === `Basic ${API_KEY}`),
-    (typeof API_KEY === 'string'),
-    (req.headers.authorization === `Basic ${API_KEY}`),
-    (req.headers.authorization),
-    (API_KEY)
-  );
   if (
     typeof req.headers.params === 'string' &&
     typeof req.headers.req === 'string' &&
