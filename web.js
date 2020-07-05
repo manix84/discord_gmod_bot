@@ -189,6 +189,10 @@ http.createServer((req, res) => {
     typeof requests[req.headers.req] === 'function' &&
     typeof API_KEY === 'string' && req.headers.Authorization === API_KEY
   ) {
+    log(
+      '[Request Headers]',
+      req.headers
+    );
     try {
       let params = JSON.parse(req.headers.params);
       requests[req.headers.req](
