@@ -154,7 +154,8 @@ const keepAliveReq = () => {
     port: KEEPALIVE_PORT,
     path: '/keep_alive',
     headers: {
-      req: 'keep_alive'
+      req: 'keep_alive',
+      authorization: API_KEY
     },
     timeout: 5 * 1000 // 5 second request timeout.
   };
