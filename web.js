@@ -155,7 +155,7 @@ const keepAliveReq = () => {
     path: '/keep_alive',
     headers: {
       req: 'keep_alive',
-      Authorization: API_KEY
+      authorization: API_KEY
     },
     timeout: 5 * 1000 // 5 second request timeout.
   };
@@ -185,13 +185,14 @@ const keepAliveReq = () => {
 http.createServer((req, res) => {
   log(
     '[Request]',
-    req
+    '[Headers]',
+    req.headers
   );
   if (
     typeof req.headers.params === 'string' &&
     typeof req.headers.req === 'string' &&
     typeof requests[req.headers.req] === 'function' &&
-    typeof API_KEY === 'string' && req.headers.Authorization === API_KEY
+    typeof API_KEY === 'string' && req.headers.authorization === API_KEY
   ) {
     try {
       let params = JSON.parse(req.headers.params);
