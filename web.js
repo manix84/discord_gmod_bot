@@ -191,7 +191,7 @@ http.createServer((req, res) => {
   log(
     '[Request]',
     "Authorised:",
-    boolean(typeof API_KEY === 'string' && req.headers.authorization === API_KEY),
+    (typeof API_KEY === 'string' && req.headers.authorization === API_KEY),
     (typeof API_KEY === 'string'),
     (req.headers.authorization === API_KEY),
     (req.headers.authorization),
