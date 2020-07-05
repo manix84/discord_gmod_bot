@@ -74,3 +74,16 @@ If you need a step-by-step tutorial, follow my [guide at steam](http://steamcomm
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
+
+## Screenshots
+### ULX Commands
+![ULX Cmds](https://i.imgur.com/pWUKAO8.png)
+
+### ULX Settings - Settings
+![ULX Settings - Settings](https://i.imgur.com/9hh9Syk.png)
+
+### ULX Settings - Player Connections
+![ULX Settings - Player Connections](https://i.imgur.com/r1caKBV.png)
+
+### Muting in action
+![Muting in action](https://i.imgur.com/a2eBESP.png)
