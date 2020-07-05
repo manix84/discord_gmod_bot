@@ -9,8 +9,21 @@
 [![discord-bot](https://img.shields.io/badge/discord-bot-_.svg?colorB=8C9EFF)](https://discord.js.org)
 [![license](https://img.shields.io/github/license/manix84/discord_gmod_bot.svg)](LICENSE)
 
-This mod, in conjunction with it's [Node Bot](https://github.com/manix84/discord_gmod_bot), mutes dead players for X seconds, or unil the end of the round in (Garry's Mod)
+This mod, in conjunction with the [GMod Addon](https://github.com/manix84/discord_gmod_addon), mutes dead players for X seconds, or unil the end of the round in (Garry's Mod).
 
+## Features
+- Remote Node Bot (the node bot and the addon don't need to be on the same server, but they can be if you want).
+- Secure & Authenticated connection, so no-one should be highjacking your bot communication.
+- Discord Server link. When someone connects, they get told to join your server, if they're not already connected.
+- Mute a Player for the entire round, or simply for a few seconds.
+- Automatically connect players when they join your server. If a new player joins, they're on the Discord server already, and use the same name, they'll get connected without even prompting them.
+- ULX Support:
+  - Added Mute/Unmute in commands menu - Obviously, you can mute/unmute a player from the ULX menu
+  - Added Discord Settings
+    - "Settings" - You can change any of the Console Variables on a per Map basis.
+    - "Player Connections" - You can add a Steam/Discord ID connection from the ULX menu.
+- Node Bot KeepAlive. Some bot hosts kill the bot if they don't get connections after a while. This option will keep the bot running, between sessions.
+    
 ## Getting Started
 If you need a step-by-step tutorial, follow my [guide at steam](http://steamcommunity.com/sharedfiles/filedetails/?id=1351369388)
 
@@ -47,13 +60,13 @@ If you need a step-by-step tutorial, follow my [guide at steam](http://steamcomm
 
 ## Credits
 
-- Marcel Transier - The original creator of [discord_gmod_bot](https://github.com/marceltransier/discord_gmod_bot.git), from which this is based.
+- Marcel Transier - The original creator of [ttt_discord_bot](https://github.com/marceltransier/ttt_discord_bot.git), from which this is based.
 - I used [discord.js](https://discord.js.org) in this project. Thanks for the easy opportunity writing a discord bot in javascript!
 - Thanks for the great Garry's Mod gamemode [Trouble in Terrorist Town](http://ttt.badking.net) I made this bot for.
 
 ## Contributing
 
-1. Fork it (<https://github.com/manix84/discord_gmod_bot/fork>)
+1. Fork it (<https://github.com/manix84/discord_gmod_addon/fork>)
 2. Create your feature branch (`git checkout -b feature/fooBar`)
 3. Commit your changes (`git commit -am 'Add some fooBar'`)
 4. Push to the branch (`git push origin feature/fooBar`)
