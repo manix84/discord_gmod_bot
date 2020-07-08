@@ -209,6 +209,11 @@ http.createServer((req, res) => {
         'Authorisation Missmatch',
         `"${req.headers.authorization}" !== "Basic ${API_KEY}"`
       );
+      error(
+        '[ERROR]',
+        'Request Details:',
+        req
+      )
     }
   }
 }).listen({
