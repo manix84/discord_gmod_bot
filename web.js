@@ -211,8 +211,8 @@ http.createServer((req, res) => {
       );
       error(
         '[ERROR]',
-        'Request Details:',
-        req
+        'Request Headers:',
+        req.headers
       )
     }
   }
