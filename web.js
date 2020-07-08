@@ -202,6 +202,13 @@ http.createServer((req, res) => {
     }
   } else {
     res.end();
+    if (typeof API_KEY === 'string' && req.headers.authorization !== `Basic ${API_KEY}`) {
+      log(
+        '[ERROR]',
+        'Authorisation Missmatch',
+        `"${req.headers.authorization}" !== "Basic ${API_KEY}"`
+      );
+    }
   }
 }).listen({
   port: PORT
