@@ -12,6 +12,7 @@ const KEEPALIVE_ENABLED = Boolean(process.env.KEEPALIVE_ENABLED == 1);
 const API_KEY = String(process.env.API_KEY) || false;
 
 const log = (...msg) => (DEBUG ? console.log(...msg) : () => {});
+const { error } = console;
 
 log('Constants: ');
 log("  DEBUG: ", DEBUG, `(${typeof DEBUG})`);
@@ -202,6 +203,18 @@ http.createServer((req, res) => {
     }
   } else {
     res.end();
+    if (typeof API_KEY === 'string' && req.headers.authorization !== `Basic ${API_KEY}`) {
+      error(
+        '[ERROR]',
+        '[Authorisation Missmatch]:',
+        `"${req.headers.authorization}" !== "Basic ${API_KEY}"`
+      );
+      error(
+        '[ERROR]',
+        '[Request Headers]:',
+        req.headers
+      )
+    }
   }
 }).listen({
   port: PORT
