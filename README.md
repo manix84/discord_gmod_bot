@@ -82,7 +82,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ![ULX Cmds](https://i.imgur.com/pWUKAO8.png)
 
 ### ULX Settings - Settings
-![ULX Settings - Settings](https://i.imgur.com/9hh9Syk.png)
+![ULX Settings - Settings](https://i.imgur.com/IJmbEjc.png)
 
 ### ULX Settings - Player Connections
 ![ULX Settings - Player Connections](https://i.imgur.com/r1caKBV.png)
