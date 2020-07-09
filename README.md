@@ -44,8 +44,8 @@ If you need a step-by-step tutorial, follow my [guide at steam](http://steamcomm
             - `API_KEY`: (Optional, but super recommended) This MUST match the GMod server. It can be anything.
             - `DISCORD_GUILD`: A copy of the Server/Guild ID.
             - `DISCORD_CHANNEL`: A copy of the Voice Channel ID.
+                - !If you're stuggling to get the Discord Guild/Channel ID, Discord have a [guide](https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-) to getting the ID's.
             - `DISCORD_TOKEN`: This allows the node bot to talk to the Discord Bot (You will get this in Step 3 below)
-            - !If you're stuggling to get the Discord Guild/Channel ID, Discord have a [guide](https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-) to getting the ID's.
     - Make sure the Node Bot server is running. Heroku will run is as a web instance.
 2. Install this Mod (I recommend using the [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=2155238885))
     - If you don't want to use steam workshop, go over to: [manix84/discord_gmod_addon](https://github.com/manix84/discord_gmod_addon.git) and just extract the project into `/garrysmod/addons/discord'.
