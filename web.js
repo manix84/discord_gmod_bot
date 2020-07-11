@@ -6,6 +6,7 @@ const DEBUG = Boolean(process.env.DEBUG == 1);
 const PORT = Number(process.env.PORT) || 37405; //unused port and since now the OFFICIAL ttt_discord_bot port ;)
 const DISCORD_GUILD = String(process.env.DISCORD_GUILD);
 const DISCORD_CHANNEL = String(process.env.DISCORD_CHANNEL);
+const DISCORD_TOKEN = String(process.env.DISCORD_TOKEN);
 const KEEPALIVE_HOST = String(process.env.KEEPALIVE_HOST);
 const KEEPALIVE_PORT = Number(process.env.KEEPALIVE_PORT) || PORT;
 const KEEPALIVE_ENABLED = Boolean(process.env.KEEPALIVE_ENABLED == 1);
@@ -19,6 +20,7 @@ log("  DEBUG: ", DEBUG, `(${typeof DEBUG})`);
 log("  PORT: ", PORT, `(${typeof PORT})`);
 log("  DISCORD_GUILD: ", DISCORD_GUILD, `(${typeof DISCORD_GUILD})`);
 log("  DISCORD_CHANNEL: ", DISCORD_CHANNEL, `(${typeof DISCORD_CHANNEL})`);
+log("  DISCORD_TOKEN: ", DISCORD_TOKEN, `(${typeof DISCORD_TOKEN})`);
 log("  KEEPALIVE_HOST: ", KEEPALIVE_HOST, `(${typeof KEEPALIVE_HOST})`);
 log("  KEEPALIVE_PORT: ", KEEPALIVE_PORT, `(${typeof KEEPALIVE_PORT})`);
 log("  KEEPALIVE_ENABLED: ", KEEPALIVE_ENABLED, `(${typeof KEEPALIVE_ENABLED})`);
@@ -34,7 +36,7 @@ const requests = [];
 
 //create discord client
 const client = new Discord.Client();
-client.login(process.env.DISCORD_TOKEN);
+client.login(DISCORD_TOKEN);
 
 client.on('ready', () => {
   log('Bot is ready to mute them all! :)');
