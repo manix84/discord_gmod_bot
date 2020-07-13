@@ -208,7 +208,7 @@ http.createServer((req, res) => {
     if (typeof API_KEY === 'string' && req.headers.authorization !== `Basic ${API_KEY}`) {
       error(
         '[ERROR]',
-        '[Authorisation Missmatch]:',
+        '[Authorisation Miss-Match]:',
         `"${req.headers.authorization}" !== "Basic ${API_KEY}"`
       );
       error(
