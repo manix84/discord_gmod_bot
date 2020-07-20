@@ -3,13 +3,13 @@ const http = require('http');
 const https = require('https');
 
 const DEBUG = Boolean(process.env.DEBUG == 1);
-const PORT = Number(process.env.PORT) || 37405; //unused port and since now the OFFICIAL ttt_discord_bot port ;)
+const PORT = process.env.PORT && Number(process.env.PORT) || 37405; //unused port and since now the OFFICIAL ttt_discord_bot port ;)
 const DISCORD_GUILD = String(process.env.DISCORD_GUILD);
 const DISCORD_CHANNEL = String(process.env.DISCORD_CHANNEL);
 const KEEPALIVE_HOST = String(process.env.KEEPALIVE_HOST);
-const KEEPALIVE_PORT = Number(process.env.KEEPALIVE_PORT) || PORT;
+const KEEPALIVE_PORT = process.env.KEEPALIVE_PORT && Number(process.env.KEEPALIVE_PORT) || PORT;
 const KEEPALIVE_ENABLED = Boolean(process.env.KEEPALIVE_ENABLED == 1);
-const API_KEY = String(process.env.API_KEY) || false;
+const API_KEY = process.env.API_KEY && String(process.env.API_KEY) || false;
 
 const log = (...msg) => (DEBUG ? console.log(...msg) : () => {});
 const { error } = console;
