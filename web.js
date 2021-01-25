@@ -116,7 +116,8 @@ requests['mute'] = (params, ret) => {
     params
   );
 
-  let member = discordGuild.members.find(user => user.id === id);
+  //let member = discordGuild.members.find(user => user.id === id);
+  let member = discordGuild.members.get(id);
   if (member) {
     if (isMemberInVoiceChannel(member)) {
       if (!member.serverMute && mute) {
