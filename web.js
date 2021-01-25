@@ -109,7 +109,7 @@ requests['mute'] = (params, ret) => {
   }
   log(
     "[Mute][Requesting]",
-    `${params}`
+    params
   );
 
   let member = discordGuild.members.find(user => user.id === id);
@@ -179,7 +179,7 @@ requests['keep_alive'] = (params, ret) => {
   });
   log(
     "[KeepAlive][Request]",
-    `${params}`
+    params
   );
 };
 
