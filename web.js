@@ -104,7 +104,11 @@ requests['mute'] = (params, ret) => {
   let id = params.id;
   let mute = params.mute;
   if (typeof id !== 'string' || typeof mute !== 'boolean') {
-    ret();
+    ret({
+      success: false,
+      errorMsg: "ID or Mute value missing",
+      errorId: "INVALID_PARAMS"
+    });
     return;
   }
   log(
@@ -122,16 +126,17 @@ requests['mute'] = (params, ret) => {
             success: true
           });
           log(
-            "[SetMute][Success]",
+            "[Mute][Discord:SetMute][Success]",
             `Muted ${id}`
           );
         }).catch((err) => {
           ret({
             success: false,
-            error: err
+            errorMsg: err,
+            errorId: "DISCORD_ERROR"
           });
           error(
-            "[SetMute][Error]",
+            "[Mute][Discord:SetMute][Error]",
             `Mute: ${id} - ${err}`
           );
         });
@@ -143,31 +148,41 @@ requests['mute'] = (params, ret) => {
             success: true
           });
           log(
-            "[SetMute][Success]",
+            "[Mute][Discord:SetMute][Success]",
             `Unmuted ${id}`
           );
         }).catch((err) => {
           ret({
             success: false,
-            error: err
+            errorMsg: err,
+            errorId: "DISCORD_ERROR"
           });
           error(
-            "[SetMute][Error]",
+            "[Mute][Discord:SetMute][Error]",
             `Unmute: ${id} - ${err}`
           );
         });
       }
     } else {
-      ret();
+      ret({
+        success: false,
+        errorMsg: "member not in voice channel",
+        errorId: "DISCORD_MEMBER_NOT_IN_CHANNEL"
+      });
+      error(
+        "[Mute][Error]",
+        `Member not in voice channel.`
+      );
     }
 
   } else {
     ret({
       success: false,
-      err: 'member not found!' //TODO lua: remove from ids table + file
+      errorMsg: "member not found!", //TODO lua: remove from ids table + file
+      errorId: "DISCORD_UNKNOWN_MEMBER"
     });
     error(
-      "[SetMute][Error]",
+      "[Mute][Error]",
       `Member not found.`
     );
   }
