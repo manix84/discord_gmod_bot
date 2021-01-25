@@ -25,6 +25,7 @@ log("  KEEPALIVE_HOST: ", KEEPALIVE_HOST, `(${typeof KEEPALIVE_HOST})`);
 log("  KEEPALIVE_PORT: ", KEEPALIVE_PORT, `(${typeof KEEPALIVE_PORT})`);
 log("  KEEPALIVE_ENABLED: ", KEEPALIVE_ENABLED, `(${typeof KEEPALIVE_ENABLED})`);
 log("  API_KEY: ", API_KEY, `(${typeof API_KEY})`);
+log(""); // New Line
 
 
 let discordGuild;
@@ -66,8 +67,7 @@ requests['connect'] = (params, ret) => {
   });
   
   log(
-    "[Connect]",
-    "[Requesting]:",
+    "[Connect][Requesting]",
     `Tag: ${tag}`
   );
 
@@ -77,8 +77,7 @@ requests['connect'] = (params, ret) => {
       answer: 1 //pls specify
     });
     error(
-      "[Connect]",
-      "[Error]",
+      "[Connect][Error]",
       `${found.length} users found with tag "${tag}".`
     );
   } else if (found.length < 1) {
@@ -86,8 +85,7 @@ requests['connect'] = (params, ret) => {
       answer: 0 //no found
     });
     error(
-      "[Connect]",
-      "[Error]",
+      "[Connect][Error]",
       `0 users found with tag "${tag}".`
     );
   } else {
@@ -96,8 +94,7 @@ requests['connect'] = (params, ret) => {
       id: found[0].id
     });
     log(
-      "[Connect]",
-      "[Success]:",
+      "[Connect][Success]",
       `Connecting ${found[0].user.tag} (${found[0].id})`
     );
   }
@@ -111,15 +108,12 @@ requests['mute'] = (params, ret) => {
     return;
   }
   log(
-    "[Mute]",
-    "[Requesting]:",
-    `Muted ${id}`
+    "[Mute][Requesting]",
+    `${params}`
   );
-  //let member = guild.members.find('id', id);
+
   let member = discordGuild.members.find(user => user.id === id);
-
   if (member) {
-
     if (isMemberInVoiceChannel(member)) {
       if (!member.serverMute && mute) {
         member.setMute(true, "dead players can't talk!").then(() => {
@@ -128,8 +122,7 @@ requests['mute'] = (params, ret) => {
             success: true
           });
           log(
-            '[SetMute]',
-            '[Success]:',
+            "[SetMute][Success]",
             `Muted ${id}`
           );
         }).catch((err) => {
@@ -138,9 +131,8 @@ requests['mute'] = (params, ret) => {
             error: err
           });
           error(
-            '[SetMute]',
-            '[Error]',
-            `Mute: ${id}: ${err}`
+            "[SetMute][Error]",
+            `Mute: ${id} - ${err}`
           );
         });
       }
@@ -151,8 +143,7 @@ requests['mute'] = (params, ret) => {
             success: true
           });
           log(
-            '[SetMute]',
-            '[Success]:',
+            "[SetMute][Success]",
             `Unmuted ${id}`
           );
         }).catch((err) => {
@@ -161,9 +152,8 @@ requests['mute'] = (params, ret) => {
             error: err
           });
           error(
-            '[SetMute]',
-            '[Error]',
-            `Unmute: ${id}: ${err}`
+            "[SetMute][Error]",
+            `Unmute: ${id} - ${err}`
           );
         });
       }
@@ -176,6 +166,10 @@ requests['mute'] = (params, ret) => {
       success: false,
       err: 'member not found!' //TODO lua: remove from ids table + file
     });
+    error(
+      "[SetMute][Error]",
+      `Member not found.`
+    );
   }
 };
 
@@ -184,8 +178,8 @@ requests['keep_alive'] = (params, ret) => {
     success: true,
   });
   log(
-    "[KeepAlive]",
-    `Requested`
+    "[KeepAlive][Request]",
+    `${params}`
   );
 };
 
@@ -201,22 +195,19 @@ const keepAliveReq = () => {
     timeout: 5 * 1000 // 5 second request timeout.
   };
   log(
-    '[KeepAlive]',
-    '[Requesting]',
+    "[KeepAlive][Requesting]",
     options
   );
   https.get(options, (res) => {
     const { statusCode } = res;
     if (statusCode === 200) {
       log(
-        '[KeepAlive]',
-        '[Success]',
+        "[KeepAlive][Success]",
         `Request successful`
       );
     } else {
       error(
-        '[KeepAlive]',
-        '[Error]',
+        "[KeepAlive][Error]",
         `Request Failed Status Code: ${statusCode}`
       );
     }
@@ -241,8 +232,7 @@ http.createServer((req, res) => {
     } catch (e) {
       res.end('no valid JSON in params');
       error(
-        '[ERROR]',
-        '[Request]:',
+        "[ERROR][Request]",
         `No valid JSON in params`
       );
     }
@@ -250,13 +240,11 @@ http.createServer((req, res) => {
     res.end();
     if (typeof API_KEY === 'string' && req.headers.authorization !== `Basic ${API_KEY}`) {
       error(
-        '[ERROR]',
-        '[Authorisation Miss-Match]:',
+        "[ERROR][Authorisation Miss-Match]",
         `"${req.headers.authorization}" !== "Basic ${API_KEY}"`
       );
       error(
-        '[ERROR]',
-        '[Request Headers]:',
+        "[ERROR][Request Headers]",
         req.headers
       )
     }
@@ -268,9 +256,8 @@ http.createServer((req, res) => {
 
   if (KEEPALIVE_ENABLED) {
     log(
-      '[KeepAlive]',
-      '[Startup]',
-      'Initialisation'
+      "[KeepAlive][Startup]",
+      `Initialisation`
     );
 
     setInterval(keepAliveReq, 20 * 60 * 1000); // load every 20 minutes
