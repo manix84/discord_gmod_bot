@@ -251,6 +251,10 @@ http.createServer((req, res) => {
         "[ERROR][Request]",
         `No valid JSON in params`
       );
+      error(
+        "[ERROR][Request Headers]",
+        req.headers
+      )
     }
   } else {
     res.end();
