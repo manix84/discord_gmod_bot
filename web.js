@@ -60,20 +60,36 @@ setMemberMutedByBot = (member, set = true) => mutedPlayers[member] = set;
 requests['connect'] = (params, ret) => {
   let tag_utf8 = params.tag.split(" ");
   let tag = "";
-
+  
   tag_utf8.forEach((e) => {
     tag = tag + String.fromCharCode(e);
   });
+  
+  log(
+    "[Connect]",
+    "[Requesting]:",
+    `Tag: ${tag}`
+  );
 
   let found = discordGuild.members.filterArray(val => val.user.tag.match(new RegExp('.*' + tag + '.*')));
   if (found.length > 1) {
     ret({
       answer: 1 //pls specify
     });
+    error(
+      "[Connect]",
+      "[Error]",
+      `${found.length} users found with tag "${tag}".`
+    );
   } else if (found.length < 1) {
     ret({
       answer: 0 //no found
     });
+    error(
+      "[Connect]",
+      "[Error]",
+      `0 users found with tag "${tag}".`
+    );
   } else {
     ret({
       tag: found[0].user.tag,
@@ -81,6 +97,7 @@ requests['connect'] = (params, ret) => {
     });
     log(
       "[Connect]",
+      "[Success]:",
       `Connecting ${found[0].user.tag} (${found[0].id})`
     );
   }
@@ -95,6 +112,7 @@ requests['mute'] = (params, ret) => {
   }
   log(
     "[Mute]",
+    "[Requesting]:",
     `Muted ${id}`
   );
   //let member = guild.members.find('id', id);
@@ -109,11 +127,21 @@ requests['mute'] = (params, ret) => {
           ret({
             success: true
           });
+          log(
+            '[SetMute]',
+            '[Success]:',
+            `Muted ${id}`
+          );
         }).catch((err) => {
           ret({
             success: false,
             error: err
           });
+          error(
+            '[SetMute]',
+            '[Error]',
+            `Mute: ${id}: ${err}`
+          );
         });
       }
       if (member.serverMute && !mute) {
@@ -122,11 +150,21 @@ requests['mute'] = (params, ret) => {
           ret({
             success: true
           });
+          log(
+            '[SetMute]',
+            '[Success]:',
+            `Unmuted ${id}`
+          );
         }).catch((err) => {
           ret({
             success: false,
             error: err
           });
+          error(
+            '[SetMute]',
+            '[Error]',
+            `Unmute: ${id}: ${err}`
+          );
         });
       }
     } else {
@@ -164,7 +202,7 @@ const keepAliveReq = () => {
   };
   log(
     '[KeepAlive]',
-    'Requesting',
+    '[Requesting]',
     options
   );
   https.get(options, (res) => {
@@ -172,13 +210,13 @@ const keepAliveReq = () => {
     if (statusCode === 200) {
       log(
         '[KeepAlive]',
-        'Success',
+        '[Success]',
         `Request successful`
       );
     } else {
-      log(
+      error(
         '[KeepAlive]',
-        'Error',
+        '[Error]',
         `Request Failed Status Code: ${statusCode}`
       );
     }
@@ -202,6 +240,11 @@ http.createServer((req, res) => {
       );
     } catch (e) {
       res.end('no valid JSON in params');
+      error(
+        '[ERROR]',
+        '[Request]:',
+        `No valid JSON in params`
+      );
     }
   } else {
     res.end();
