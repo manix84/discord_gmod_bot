@@ -106,6 +106,7 @@ requests['mute'] = (params, ret) => {
   if (typeof id !== 'string' || typeof mute !== 'boolean') {
     ret({
       success: false,
+      error: "ID or Mute value missing", //legacy
       errorMsg: "ID or Mute value missing",
       errorId: "INVALID_PARAMS"
     });
@@ -133,6 +134,7 @@ requests['mute'] = (params, ret) => {
         }).catch((err) => {
           ret({
             success: false,
+            error: err, //Legacy
             errorMsg: err,
             errorId: "DISCORD_ERROR"
           });
@@ -155,6 +157,7 @@ requests['mute'] = (params, ret) => {
         }).catch((err) => {
           ret({
             success: false,
+            error: err, //Legacy
             errorMsg: err,
             errorId: "DISCORD_ERROR"
           });
@@ -167,6 +170,7 @@ requests['mute'] = (params, ret) => {
     } else {
       ret({
         success: false,
+        error: "member not in voice channel", //legacy
         errorMsg: "member not in voice channel",
         errorId: "DISCORD_MEMBER_NOT_IN_CHANNEL"
       });
@@ -179,7 +183,8 @@ requests['mute'] = (params, ret) => {
   } else {
     ret({
       success: false,
-      errorMsg: "member not found!", //TODO lua: remove from ids table + file
+      error: "member not found", //Legacy
+      errorMsg: "member not found",
       errorId: "DISCORD_UNKNOWN_MEMBER"
     });
     error(
