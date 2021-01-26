@@ -262,16 +262,43 @@ http.createServer((req, res) => {
       )
     }
   } else {
-    res.end();
+    error(
+      "[ERROR][Request Headers]",
+      req.headers
+    )
     if (typeof API_KEY === 'string' && req.headers.authorization !== `Basic ${API_KEY}`) {
+      res.writeHead(401);
+      res.end(JSON.stringify({
+        error: "Authorisation Miss-Match", //Legacy
+        errorMsg: "Authorisation Miss-Match",
+        errorId: "AUTHORIZATION_MISSMATCH"
+      }));
       error(
-        "[ERROR][Authorisation Miss-Match]",
+        "[ERROR][Authorisation]",
         `"${req.headers.authorization}" !== "Basic ${API_KEY}"`
       );
+    } else if (requests[req.headers.req] !== 'function') {
+      res.writeHead(400);
+      res.end(JSON.stringify({
+        error: `Unknown request "${req.headers.req}"`, //Legacy
+        errorMsg: `Unknown request "${req.headers.req}"`,
+        errorId: "UNKNOWN_REQUEST"
+      }));
       error(
-        "[ERROR][Request Headers]",
-        req.headers
-      )
+        "[ERROR][Request]",
+        `Unknown request "${req.headers.req}"`
+      );
+    } else {
+      res.writeHead(400);
+      res.end(JSON.stringify({
+        error: `Unknown`, //Legacy
+        errorMsg: `Unknown`,
+        errorId: "UNKNOWN_ERROR"
+      }));
+      error(
+        "[ERROR][Request]",
+        `Unknown request "${req.headers.req}"`
+      );
     }
   }
 }).listen({
