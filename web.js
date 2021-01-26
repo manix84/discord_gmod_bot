@@ -237,13 +237,12 @@ const keepAliveReq = () => {
 
 http.createServer((req, res) => {
   if (
-    typeof req.headers.params === 'string' &&
     typeof req.headers.req === 'string' &&
     typeof requests[req.headers.req] === 'function' &&
     typeof API_KEY === 'string' && req.headers.authorization === `Basic ${API_KEY}`
   ) {
     try {
-      let params = JSON.parse(req.headers.params);
+      let params = JSON.parse(req.headers.params) || {};
       requests[req.headers.req](
         params,
         (ret) => res.end(
