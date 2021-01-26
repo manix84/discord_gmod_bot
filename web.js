@@ -213,6 +213,7 @@ requests['keep_alive'] = (params, ret) => {
 
 requests['sync'] = (params, ret) => {
   ret({
+    success: true,
     version: VERSION,
     debugMode: DEBUG,
     discordGuild: DISCORD_GUILD,
