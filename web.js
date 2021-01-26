@@ -110,6 +110,10 @@ requests['mute'] = (params, ret) => {
       errorMsg: "ID or Mute value missing",
       errorId: "INVALID_PARAMS"
     });
+    error(
+      "[Mute][Missing Params]",
+      `id: "${id}" (${typeof id}), mute: "${mute}" (${typeof mute})`
+    );
     return;
   }
   log(
