@@ -1,6 +1,6 @@
 {
-  "name": "discord_bot",
-  "version": "1.0.0",
+  "name": "discord_gmod_bot",
+  "version": "1.2.0",
   "description": "the discord bot part of the ttt_discord_bot",
   "main": "web.js",
   "dependencies": {
@@ -12,17 +12,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/marceltransier/ttt_discord_bot.git"
+    "url": "git+https://github.com/manix84/discord_gmod_bot.git"
   },
   "keywords": [
     "discord",
     "bot",
-    "ttt"
+    "gmod"
   ],
-  "author": "Marcel Transier",
+  "author": "Rob Taylor",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/marceltransier/ttt_discord_bot/issues"
+    "url": "https://github.com/manix84/discord_gmod_bot/issues"
   },
-  "homepage": "https://github.com/marceltransier/ttt_discord_bot#readme"
+  "homepage": "https://github.com/manix84/discord_gmod_bot#readme"
 }
