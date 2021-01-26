@@ -1,7 +1,9 @@
 const Discord = require('discord.js');
 const http = require('http');
 const https = require('https');
+const packageData = require('./package');
 
+const VERSION = String(packageData.version);
 const DEBUG = Boolean(process.env.DEBUG == 1);
 const PORT = Number(process.env.PORT) || 37405; //unused port and since now the OFFICIAL ttt_discord_bot port ;)
 const DISCORD_GUILD = String(process.env.DISCORD_GUILD);
@@ -16,6 +18,7 @@ const log = (...msg) => (DEBUG ? console.log(...msg) : () => {});
 const { error } = console;
 
 log('Constants: ');
+log("  VERSION:", VERSION, `(${typeof VERSION})`);
 log("  DEBUG: ", DEBUG, `(${typeof DEBUG})`);
 log("  PORT: ", PORT, `(${typeof PORT})`);
 log("  DISCORD_GUILD: ", DISCORD_GUILD, `(${typeof DISCORD_GUILD})`);
@@ -204,6 +207,19 @@ requests['keep_alive'] = (params, ret) => {
   });
   log(
     "[KeepAlive][Request]",
+    params
+  );
+};
+
+requests['sync'] = (params, ret) => {
+  ret({
+    version: VERSION,
+    debugMode: DEBUG,
+    discordGuild: DISCORD_GUILD,
+    discordChannel: DISCORD_CHANNEL
+  });
+  log(
+    "[Sync][Request]",
     params
   );
 };
