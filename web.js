@@ -44,10 +44,10 @@ client.login(DISCORD_TOKEN);
 
 client.on('ready', () => {
   log('Bot is ready to mute them all! :)');
-  discordGuild = client.guilds.get(DISCORD_GUILD);
-  // guild = client.guilds.find('id', DISCORD_GUILD);
-  discordChannel = discordGuild.channels.get(DISCORD_CHANNEL);
-  // channel = guild.channels.find('id', DISCORD_CHANNEL);
+  // discordGuild = client.guilds.get(DISCORD_GUILD);
+  discordGuild = client.guilds.find('id', DISCORD_GUILD);
+  // discordChannel = discordGuild.channels.get(DISCORD_CHANNEL);
+  discordChannel = guild.channels.find('id', DISCORD_CHANNEL);
 });
 client.on('voiceStateUpdate', (oldMember, newMember) => { //player leaves the ttt-channel
   if (oldMember.voiceChannel != newMember.voiceChannel && isMemberInVoiceChannel(oldMember)) {
@@ -124,8 +124,8 @@ requests['mute'] = (params, ret) => {
     params
   );
 
-  //let member = discordGuild.members.find(user => user.id === id);
-  let member = discordGuild.members.get(id);
+  let member = discordGuild.members.find(user => user.id === id);
+//   let member = discordGuild.members.get(id);
   if (member) {
     if (isMemberInVoiceChannel(member)) {
       if (!member.serverMute && mute) {
