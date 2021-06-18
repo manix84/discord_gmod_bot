@@ -4,6 +4,7 @@
   "description": "the discord bot part of the ttt_discord_bot",
   "main": "web.js",
   "dependencies": {
+    "chalk": "^4.1.1",
     "discord.js": "^11.3.2",
     "dotenv-flow": "^3.2.0",
     "http": "0.0.1-security",

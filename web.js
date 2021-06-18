@@ -4,6 +4,7 @@ require('dotenv-flow').config({
 const Discord = require('discord.js');
 const http = require('http');
 const https = require('https');
+const chalk = require('chalk');
 const packageData = require('./package');
 
 const VERSION = String(packageData.version);
@@ -35,17 +36,17 @@ const log = (...msgs) => {
 const br = () => console.log('');
 const { error } = console;
 
-slog('Constants: ');
-slog("  VERSION:", VERSION, `(${typeof VERSION})`);
-slog("  DEBUG: ", DEBUG, `(${typeof DEBUG})`);
-slog("  PORT: ", PORT, `(${typeof PORT})`);
-slog("  DISCORD_GUILD: ", DISCORD_GUILD, `(${typeof DISCORD_GUILD})`);
-slog("  DISCORD_CHANNEL: ", DISCORD_CHANNEL, `(${typeof DISCORD_CHANNEL})`);
-slog("  DISCORD_TOKEN: ", DISCORD_TOKEN, `(${typeof DISCORD_TOKEN})`);
-slog("  KEEPALIVE_HOST: ", KEEPALIVE_HOST, `(${typeof KEEPALIVE_HOST})`);
-slog("  KEEPALIVE_PORT: ", KEEPALIVE_PORT, `(${typeof KEEPALIVE_PORT})`);
-slog("  KEEPALIVE_ENABLED: ", KEEPALIVE_ENABLED, `(${typeof KEEPALIVE_ENABLED})`);
-slog("  API_KEY: ", API_KEY, `(${typeof API_KEY})`);
+slog(chalk.blue('Constants: '));
+slog(chalk.blue(`  VERSION: ${chalk.bold(VERSION)} (${typeof VERSION})`));
+slog(chalk.blue(`  DEBUG: ${chalk.bold(DEBUG)} (${typeof DEBUG})`));
+slog(chalk.blue(`  PORT: ${chalk.bold(PORT)} (${typeof PORT})`));
+slog(chalk.blue(`  DISCORD_GUILD: ${chalk.bold(DISCORD_GUILD)} (${typeof DISCORD_GUILD})`));
+slog(chalk.blue(`  DISCORD_CHANNEL: ${chalk.bold(DISCORD_CHANNEL)} (${typeof DISCORD_CHANNEL})`));
+slog(chalk.blue(`  DISCORD_TOKEN: ${chalk.bold(DISCORD_TOKEN)} (${typeof DISCORD_TOKEN})`));
+slog(chalk.blue(`  KEEPALIVE_HOST: ${chalk.bold(KEEPALIVE_HOST)} (${typeof KEEPALIVE_HOST})`));
+slog(chalk.blue(`  KEEPALIVE_PORT: ${chalk.bold(KEEPALIVE_PORT)} (${typeof KEEPALIVE_PORT})`));
+slog(chalk.blue(`  KEEPALIVE_ENABLED: ${chalk.bold(KEEPALIVE_ENABLED)} (${typeof KEEPALIVE_ENABLED})`));
+slog(chalk.blue(`  API_KEY: ${chalk.bold(API_KEY)} (${typeof API_KEY})`));
 br(); // New Line
 
 
