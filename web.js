@@ -17,21 +17,36 @@ const KEEPALIVE_PORT = Number(process.env.KEEPALIVE_PORT) || PORT;
 const KEEPALIVE_ENABLED = Boolean(process.env.KEEPALIVE_ENABLED == 1);
 const API_KEY = String(process.env.API_KEY) || false;
 
-const log = (...msg) => (DEBUG ? console.log(...msg) : () => {});
+// Secure logging (for initial log of information)
+const slog = (...msgs) => {
+  if (!DEBUG) return;
+  console.log(...msgs);
+}
+// Regular logging (for requests/responses)
+const log = (...msgs) => {
+  if (!DEBUG) return;
+  console.log(...msgs.map((m) => {
+    if (typeof m === 'string') {
+      return m.replace(API_KEY, "API_KEY_OBFUSCATED");
+    }
+    return m;
+  }));
+};
+const br = () => console.log('');
 const { error } = console;
 
-log('Constants: ');
-log("  VERSION:", VERSION, `(${typeof VERSION})`);
-log("  DEBUG: ", DEBUG, `(${typeof DEBUG})`);
-log("  PORT: ", PORT, `(${typeof PORT})`);
-log("  DISCORD_GUILD: ", DISCORD_GUILD, `(${typeof DISCORD_GUILD})`);
-log("  DISCORD_CHANNEL: ", DISCORD_CHANNEL, `(${typeof DISCORD_CHANNEL})`);
-log("  DISCORD_TOKEN: ", DISCORD_TOKEN, `(${typeof DISCORD_TOKEN})`);
-log("  KEEPALIVE_HOST: ", KEEPALIVE_HOST, `(${typeof KEEPALIVE_HOST})`);
-log("  KEEPALIVE_PORT: ", KEEPALIVE_PORT, `(${typeof KEEPALIVE_PORT})`);
-log("  KEEPALIVE_ENABLED: ", KEEPALIVE_ENABLED, `(${typeof KEEPALIVE_ENABLED})`);
-log("  API_KEY: ", API_KEY, `(${typeof API_KEY})`);
-log(""); // New Line
+slog('Constants: ');
+slog("  VERSION:", VERSION, `(${typeof VERSION})`);
+slog("  DEBUG: ", DEBUG, `(${typeof DEBUG})`);
+slog("  PORT: ", PORT, `(${typeof PORT})`);
+slog("  DISCORD_GUILD: ", DISCORD_GUILD, `(${typeof DISCORD_GUILD})`);
+slog("  DISCORD_CHANNEL: ", DISCORD_CHANNEL, `(${typeof DISCORD_CHANNEL})`);
+slog("  DISCORD_TOKEN: ", DISCORD_TOKEN, `(${typeof DISCORD_TOKEN})`);
+slog("  KEEPALIVE_HOST: ", KEEPALIVE_HOST, `(${typeof KEEPALIVE_HOST})`);
+slog("  KEEPALIVE_PORT: ", KEEPALIVE_PORT, `(${typeof KEEPALIVE_PORT})`);
+slog("  KEEPALIVE_ENABLED: ", KEEPALIVE_ENABLED, `(${typeof KEEPALIVE_ENABLED})`);
+slog("  API_KEY: ", API_KEY, `(${typeof API_KEY})`);
+br(); // New Line
 
 
 let discordGuild;
