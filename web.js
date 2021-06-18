@@ -21,7 +21,7 @@ const API_KEY = String(process.env.API_KEY) || false;
 // Secure logging (for initial log of information)
 const slog = (...msgs) => {
   if (!DEBUG) return;
-  console.log(...msgs);
+  console.log(chalk.blue(...msgs));
 }
 // Regular logging (for requests/responses)
 const log = (...msgs) => {
@@ -33,20 +33,20 @@ const log = (...msgs) => {
     return m;
   }));
 };
-const br = () => console.log('');
-const { error } = console;
+const br = newLine = () => console.log('');
+const { error } = (...msgs) => console.error(chalk.red(...msgs));
 
-slog(chalk.blue('Constants: '));
-slog(chalk.blue(`  VERSION: ${chalk.bold(VERSION)} (${typeof VERSION})`));
-slog(chalk.blue(`  DEBUG: ${chalk.bold(DEBUG)} (${typeof DEBUG})`));
-slog(chalk.blue(`  PORT: ${chalk.bold(PORT)} (${typeof PORT})`));
-slog(chalk.blue(`  DISCORD_GUILD: ${chalk.bold(DISCORD_GUILD)} (${typeof DISCORD_GUILD})`));
-slog(chalk.blue(`  DISCORD_CHANNEL: ${chalk.bold(DISCORD_CHANNEL)} (${typeof DISCORD_CHANNEL})`));
-slog(chalk.blue(`  DISCORD_TOKEN: ${chalk.bold(DISCORD_TOKEN)} (${typeof DISCORD_TOKEN})`));
-slog(chalk.blue(`  KEEPALIVE_HOST: ${chalk.bold(KEEPALIVE_HOST)} (${typeof KEEPALIVE_HOST})`));
-slog(chalk.blue(`  KEEPALIVE_PORT: ${chalk.bold(KEEPALIVE_PORT)} (${typeof KEEPALIVE_PORT})`));
-slog(chalk.blue(`  KEEPALIVE_ENABLED: ${chalk.bold(KEEPALIVE_ENABLED)} (${typeof KEEPALIVE_ENABLED})`));
-slog(chalk.blue(`  API_KEY: ${chalk.bold(API_KEY)} (${typeof API_KEY})`));
+slog('Constants: ');
+slog(`  VERSION: ${chalk.bold(VERSION)} (${typeof VERSION})`);
+slog(`  DEBUG: ${chalk.bold(DEBUG)} (${typeof DEBUG})`);
+slog(`  PORT: ${chalk.bold(PORT)} (${typeof PORT})`);
+slog(`  DISCORD_GUILD: ${chalk.bold(DISCORD_GUILD)} (${typeof DISCORD_GUILD})`);
+slog(`  DISCORD_CHANNEL: ${chalk.bold(DISCORD_CHANNEL)} (${typeof DISCORD_CHANNEL})`);
+slog(`  DISCORD_TOKEN: ${chalk.bold(DISCORD_TOKEN)} (${typeof DISCORD_TOKEN})`);
+slog(`  KEEPALIVE_HOST: ${chalk.bold(KEEPALIVE_HOST)} (${typeof KEEPALIVE_HOST})`);
+slog(`  KEEPALIVE_PORT: ${chalk.bold(KEEPALIVE_PORT)} (${typeof KEEPALIVE_PORT})`);
+slog(`  KEEPALIVE_ENABLED: ${chalk.bold(KEEPALIVE_ENABLED)} (${typeof KEEPALIVE_ENABLED})`);
+slog(`  API_KEY: ${chalk.bold(API_KEY)} (${typeof API_KEY})`);
 br(); // New Line
 
 
@@ -62,7 +62,9 @@ const client = new Discord.Client();
 client.login(DISCORD_TOKEN);
 
 client.on('ready', () => {
-  log('Bot is ready to mute them all! :)');
+  log(chalk.green('Bot is ready to mute them all! :)'));
+  br();
+
   discordGuild = client.guilds.get(DISCORD_GUILD);
   // guild = client.guilds.find('id', DISCORD_GUILD);
   discordChannel = discordGuild.channels.get(DISCORD_CHANNEL);
@@ -345,7 +347,7 @@ http.createServer((req, res) => {
 }).listen({
   port: PORT
 }, () => {
-  log(`Bot endpoint is running: https://${KEEPALIVE_HOST}:${KEEPALIVE_PORT}`);
+  log(chalk.green(`Bot endpoint is running: https://${KEEPALIVE_HOST}:${KEEPALIVE_PORT}`));
 
   if (KEEPALIVE_ENABLED) {
     log(
