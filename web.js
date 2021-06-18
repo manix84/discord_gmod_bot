@@ -1,3 +1,6 @@
+require('dotenv-flow').config({
+  silent: true
+});
 const Discord = require('discord.js');
 const http = require('http');
 const https = require('https');
@@ -64,11 +67,11 @@ setMemberMutedByBot = (member, set = true) => mutedPlayers[member] = set;
 requests['connect'] = (params, ret) => {
   let tag_utf8 = params.tag.split(" ");
   let tag = "";
-  
+
   tag_utf8.forEach((e) => {
     tag = tag + String.fromCharCode(e);
   });
-  
+
   log(
     "[Connect][Requesting]",
     `Tag: ${tag}`
