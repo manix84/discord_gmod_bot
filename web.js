@@ -143,7 +143,6 @@ requests['mute'] = (params, ret) => {
     params
   );
 
-  //let member = discordGuild.members.find(user => user.id === id);
   discordGuild.members.fetch(id)
     .then((member) => {
       if (!member.voice.serverMute && mute) {
