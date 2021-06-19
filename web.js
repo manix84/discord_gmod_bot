@@ -33,8 +33,8 @@ const log = (...msgs) => {
     return m;
   }));
 };
-const br = newLine = () => console.log('');
-const { error } = (...msgs) => console.error(chalk.red(...msgs));
+const error = (...msgs) => console.error(chalk.red(...msgs));
+const br = newLine = () => console.log();
 
 slog('Constants: ');
 slog(`  VERSION: ${chalk.bold(VERSION)} (${typeof VERSION})`);
@@ -51,38 +51,41 @@ br(); // New Line
 
 
 let discordGuild;
-let discordChannel;
-
-const mutedPlayers = {};
 
 const requests = [];
 
 //create discord client
-const client = new Discord.Client();
-client.login(DISCORD_TOKEN);
+const bot = new Discord.Client();
+bot.login(DISCORD_TOKEN);
+let isBotReady = false;
 
-client.on('ready', () => {
+bot.on('ready', () => {
   log(chalk.green('Bot is ready to mute them all! :)'));
   br();
-
-  discordGuild = client.guilds.get(DISCORD_GUILD);
-  // guild = client.guilds.find('id', DISCORD_GUILD);
-  discordChannel = discordGuild.channels.get(DISCORD_CHANNEL);
-  // channel = guild.channels.find('id', DISCORD_CHANNEL);
+  isBotReady = true;
+  bot.guilds.fetch(DISCORD_GUILD).then(data => discordGuild = data);
 });
-client.on('voiceStateUpdate', (oldMember, newMember) => { //player leaves the ttt-channel
-  if (oldMember.voiceChannel != newMember.voiceChannel && isMemberInVoiceChannel(oldMember)) {
-    if (isMemberMutedByBot(newMember) && newMember.serverMute) newMember.setMute(false).then(() => {
-      setMemberMutedByBot(newMember, false);
-    });
+
+bot.on('error', (err) => {
+  error(err)
+})
+
+bot.on('voiceStateUpdate', (oldState, newState) => {
+  if (newState.channelID !== oldState.channelID) {
+    if (newState.channelID === null) {
+      log(chalk.yellow(`${oldState.member.displayName} left voice channels.`));
+    }
+    else if (newState.channelID === DISCORD_CHANNEL) {
+      log(chalk.yellow(`${newState.member.displayName} joined "${newState.channel.name}" (Muter Channel).`));
+    }
+    else if (newState.channelID !== DISCORD_CHANNEL) {
+      log(chalk.yellow(`${newState.member.displayName} joined "${newState.channel.name}" (Not the Muter Channel).`));
+    }
   }
 });
 
-isMemberInVoiceChannel = (member) => member.voiceChannelID == DISCORD_CHANNEL;
-isMemberMutedByBot = (member) => mutedPlayers[member] == true;
-setMemberMutedByBot = (member, set = true) => mutedPlayers[member] = set;
-
 requests['connect'] = (params, ret) => {
+  console.log("params", params)
   let tag_utf8 = params.tag.split(" ");
   let tag = "";
 
@@ -92,19 +95,14 @@ requests['connect'] = (params, ret) => {
 
   log(
     "[Connect][Requesting]",
-    `Tag: ${tag}`
+    `tag_utf8: ${params.tag},`,
+    `tag: ${tag}`
   );
+  const found = discordGuild.members.cache.find(user => (
+    user.id === tag || user.displayName.match(new RegExp(`.*${tag}.*`)) || false
+  ));
 
-  let found = discordGuild.members.filterArray(val => val.user.tag.match(new RegExp('.*' + tag + '.*')));
-  if (found.length > 1) {
-    ret({
-      answer: 1 //pls specify
-    });
-    error(
-      "[Connect][Error]",
-      `${found.length} users found with tag "${tag}".`
-    );
-  } else if (found.length < 1) {
+  if (!found) {
     ret({
       answer: 0 //no found
     });
@@ -114,13 +112,13 @@ requests['connect'] = (params, ret) => {
     );
   } else {
     ret({
-      tag: found[0].user.tag,
-      id: found[0].id
+      tag: found.displayName,
+      id: found.id
     });
-    log(
+    log(chalk.green(
       "[Connect][Success]",
-      `Connecting ${found[0].user.tag} (${found[0].id})`
-    );
+      `Connecting ${found.displayName} (${found.id})`
+    ));
   }
 };
 
@@ -146,12 +144,10 @@ requests['mute'] = (params, ret) => {
   );
 
   //let member = discordGuild.members.find(user => user.id === id);
-  let member = discordGuild.members.get(id);
-  if (member) {
-    if (isMemberInVoiceChannel(member)) {
-      if (!member.serverMute && mute) {
-        member.setMute(true, "dead players can't talk!").then(() => {
-          setMemberMutedByBot(member);
+  discordGuild.members.fetch(id)
+    .then((member) => {
+      if (!member.voice.serverMute && mute) {
+        member.voice.setMute(true, "dead players can't talk!").then(() => {
           ret({
             success: true
           });
@@ -172,9 +168,8 @@ requests['mute'] = (params, ret) => {
           );
         });
       }
-      if (member.serverMute && !mute) {
-        member.setMute(false).then(() => {
-          setMemberMutedByBot(member, false);
+      if (member.voice.serverMute && !mute) {
+        member.voice.setMute(false).then(() => {
           ret({
             success: true
           });
@@ -195,7 +190,8 @@ requests['mute'] = (params, ret) => {
           );
         });
       }
-    } else {
+    })
+    .catch((err) => {
       ret({
         success: false,
         error: "member not in voice channel", //legacy
@@ -204,22 +200,9 @@ requests['mute'] = (params, ret) => {
       });
       error(
         "[Mute][Error]",
-        `Member not in voice channel.`
+        err
       );
-    }
-
-  } else {
-    ret({
-      success: false,
-      error: "member not found", //Legacy
-      errorMsg: "member not found",
-      errorId: "DISCORD_UNKNOWN_MEMBER"
     });
-    error(
-      "[Mute][Error]",
-      `Member not found.`
-    );
-  }
 };
 
 requests['keep_alive'] = (params, ret) => {
@@ -279,6 +262,10 @@ const keepAliveReq = () => {
 };
 
 http.createServer((req, res) => {
+  if (!isBotReady) {
+    error('bot still loading');
+    return;
+  }
   if (
     typeof req.headers.params === 'string' &&
     typeof req.headers.req === 'string' &&
@@ -287,21 +274,22 @@ http.createServer((req, res) => {
   ) {
     try {
       let params = JSON.parse(req.headers.params);
+      console.log('params', params);
       requests[req.headers.req](
         params,
         (ret) => res.end(
           JSON.stringify(ret)
         )
       );
-    } catch (e) {
-      res.end('no valid JSON in params');
+    } catch (err) {
+      res.end(err.msg);
       error(
         "[ERROR][Request]",
-        `No valid JSON in params`
+        err
       );
       error(
         "[ERROR][Request Headers]",
-        req.headers
+        JSON.stringify(req.headers)
       )
     }
   } else {
@@ -347,7 +335,7 @@ http.createServer((req, res) => {
 }).listen({
   port: PORT
 }, () => {
-  log(chalk.green(`Bot endpoint is running: https://${KEEPALIVE_HOST}:${KEEPALIVE_PORT}`));
+  log(chalk.green(`Bot endpoint is running: https://${KEEPALIVE_HOST}:${KEEPALIVE_PORT || PORT}`));
 
   if (KEEPALIVE_ENABLED) {
     log(
