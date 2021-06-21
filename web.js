@@ -73,13 +73,10 @@ bot.on('error', (err) => {
 bot.on('voiceStateUpdate', (oldState, newState) => {
   if (newState.channelID !== oldState.channelID) {
     if (newState.channelID === null) {
-      log(chalk.yellow(`${oldState.member.displayName} left voice channels.`));
+      log(chalk.yellow(`${oldState.member.displayName} (${oldState.member.id}) left voice channels.`));
     }
-    else if (newState.channelID === DISCORD_CHANNEL) {
-      log(chalk.yellow(`${newState.member.displayName} joined "${newState.channel.name}" (Muter Channel).`));
-    }
-    else if (newState.channelID !== DISCORD_CHANNEL) {
-      log(chalk.yellow(`${newState.member.displayName} joined "${newState.channel.name}" (Not the Muter Channel).`));
+    else {
+      log(chalk.yellow(`${newState.member.displayName} (${newState.member.id}) joined "${newState.channel.name}" (${newState.channel.id})${(newState.channelID === DISCORD_CHANNEL) ? ' [Muter Channel]' : ''}.`));
     }
   }
 });
