@@ -87,17 +87,17 @@ requests['connect'] = (params, ret) => {
   let tag_utf8 = params.tag.split(" ");
   let tag = "";
 
-  tag_utf8.forEach((e) => {
-    tag = tag + String.fromCharCode(e);
+  tag_utf8.forEach((char) => {
+    tag = tag + String.fromCharCode(char);
   });
 
   log(
     "[Connect][Requesting]",
     `Searching for "${tag}" (utf8: "${params.tag}")`
   );
-  const found = discordGuild.members.cache.find(user => (
-    user.id === tag || user.displayName.match(new RegExp(`.*${tag}.*`)) || false
-  ));
+  const found = discordGuild.members.cache.find(user =>
+    (user.id === tag || user.displayName.match(new RegExp(`.*${tag}.*`))) || false
+  );
 
   if (!found) {
     ret({
