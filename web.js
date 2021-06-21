@@ -60,10 +60,12 @@ bot.login(DISCORD_TOKEN);
 let isBotReady = false;
 
 bot.on('ready', () => {
-  log(chalk.green('Bot is ready to mute them all! :)'));
-  br();
-  isBotReady = true;
-  bot.guilds.fetch(DISCORD_GUILD).then(data => discordGuild = data);
+  bot.guilds.fetch(DISCORD_GUILD).then(data => {
+    discordGuild = data;
+    isBotReady = true;
+    log(chalk.green('Bot is ready to mute them all! :)'));
+    br();
+  });
 });
 
 bot.on('error', (err) => {
