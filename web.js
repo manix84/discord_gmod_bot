@@ -84,7 +84,6 @@ bot.on('voiceStateUpdate', (oldState, newState) => {
 });
 
 requests['connect'] = (params, ret) => {
-  console.log("params", params)
   let tag_utf8 = params.tag.split(" ");
   let tag = "";
 
@@ -94,8 +93,7 @@ requests['connect'] = (params, ret) => {
 
   log(
     "[Connect][Requesting]",
-    `tag_utf8: ${params.tag},`,
-    `tag: ${tag}`
+    `Searching for "${tag}" (utf8: "${params.tag}")`
   );
   const found = discordGuild.members.cache.find(user => (
     user.id === tag || user.displayName.match(new RegExp(`.*${tag}.*`)) || false
@@ -133,7 +131,8 @@ requests['mute'] = (params, ret) => {
     });
     error(
       "[Mute][Missing Params]",
-      `id: "${id}" (${typeof id}), mute: "${mute}" (${typeof mute})`
+      `id: "${id}" (${typeof id}),`,
+      `mute: "${mute}" (${typeof mute})`
     );
     return;
   }
@@ -272,7 +271,6 @@ http.createServer((req, res) => {
   ) {
     try {
       let params = JSON.parse(req.headers.params);
-      console.log('params', params);
       requests[req.headers.req](
         params,
         (ret) => res.end(
