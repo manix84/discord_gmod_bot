@@ -48,7 +48,7 @@ If you need a step-by-step tutorial, follow my [guide at steam](http://steamcomm
                 - To get the `DISCORD_TOKEN`, you'll need to create a [Discord Bot](https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token). You'll need to follow these instructions to invite the bot, into your server.
                 - Make sure you grant the bot the permissions to Mute Members.
     - Make sure the Node Bot server is running. Heroku will run is as a web instance.
-    - If configuring the Discord Bot on the same server as the Garry's Mod Server (i.e. it'll connect to localhost), add -allowlocalhttp to the srcds launch options.
+    - If configuring the Discord Bot on the same server as the Garry's Mod Server (i.e. it'll connect to localhost), add `-allowlocalhttp` to the srcds launch options.
 2. Install this Mod (I recommend using the [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=2155238885))
     - If you don't want to use steam workshop, go over to: [manix84/discord_gmod_addon](https://github.com/manix84/discord_gmod_addon.git) and just extract the project into `/garrysmod/addons/discord'.
 3. Make sure you've got the `server convars` in `/garrysmod/cfg/server.cfg`
