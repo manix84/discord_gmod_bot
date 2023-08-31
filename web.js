@@ -15,6 +15,7 @@ const DISCORD_CHANNEL = String(process.env.DISCORD_CHANNEL);
 const DISCORD_TOKEN = String(process.env.DISCORD_TOKEN);
 const KEEPALIVE_HOST = String(process.env.KEEPALIVE_HOST);
 const KEEPALIVE_PORT = Number(process.env.KEEPALIVE_PORT) || PORT;
+const KEEPALIVE_METHOD = String(process.env.KEEPALIVE_METHOD) || 'https';
 const KEEPALIVE_ENABLED = Boolean(process.env.KEEPALIVE_ENABLED == 1);
 const API_KEY = String(process.env.API_KEY) || false;
 
@@ -45,6 +46,7 @@ slog(`  DISCORD_CHANNEL: ${chalk.bold(DISCORD_CHANNEL)} (${typeof DISCORD_CHANNE
 slog(`  DISCORD_TOKEN: ${chalk.bold(DISCORD_TOKEN)} (${typeof DISCORD_TOKEN})`);
 slog(`  KEEPALIVE_HOST: ${chalk.bold(KEEPALIVE_HOST)} (${typeof KEEPALIVE_HOST})`);
 slog(`  KEEPALIVE_PORT: ${chalk.bold(KEEPALIVE_PORT)} (${typeof KEEPALIVE_PORT})`);
+slog(`  KEEPALIVE_METHOD: ${chalk.bold(KEEPALIVE_METHOD)} (${typeof KEEPALIVE_METHOD})`);
 slog(`  KEEPALIVE_ENABLED: ${chalk.bold(KEEPALIVE_ENABLED)} (${typeof KEEPALIVE_ENABLED})`);
 slog(`  API_KEY: ${chalk.bold(API_KEY)} (${typeof API_KEY})`);
 br(); // New Line
@@ -227,8 +229,10 @@ requests['sync'] = (params, ret) => {
 };
 
 const keepAliveReq = () => {
+  const reqMethod = KEEPALIVE_METHOD === 'https' ? https : http;
+
   const options = {
-    host: KEEPALIVE_HOST,
+    hostname: KEEPALIVE_HOST,
     port: KEEPALIVE_PORT,
     path: '/keep_alive',
     headers: {
@@ -242,7 +246,7 @@ const keepAliveReq = () => {
     "[KeepAlive][Requesting]",
     options
   );
-  https.get(options, (res) => {
+  reqMethod.get(options, (res) => {
     const { statusCode } = res;
     if (statusCode === 200) {
       log(
@@ -331,7 +335,7 @@ http.createServer((req, res) => {
 }).listen({
   port: PORT
 }, () => {
-  log(chalk.green(`Bot endpoint is running: https://${KEEPALIVE_HOST}:${KEEPALIVE_PORT || PORT}`));
+  log(chalk.green(`Bot endpoint is running: ${KEEPALIVE_METHOD}://${KEEPALIVE_HOST}:${KEEPALIVE_PORT || PORT}`));
 
   if (KEEPALIVE_ENABLED) {
     log(
