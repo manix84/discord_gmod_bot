@@ -47,6 +47,10 @@ If you need a step-by-step tutorial, follow my [guide at steam](http://steamcomm
             - `DISCORD_TOKEN`: This allows the node bot to talk to the Discord Bot (You will get this in Step 3 below)
                 - To get the `DISCORD_TOKEN`, you'll need to create a [Discord Bot](https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token). You'll need to follow these instructions to invite the bot, into your server.
                 - Make sure you grant the bot the permissions to Mute Members.
+            - `KEEPALIVE_HOST`: The external Hostname of the bot e.g. my-bot.herokuapp.com
+            - `KEEPALIVE_PORT`: The external Port of the bot e.g. 443
+            - `KEEPALIVE_METHOD`: The Method to use for doing the keepalive requests. http | https
+            - `KEEPALIVE_ENABLED`: If keepalive requests should be used. 1 | 0
     - Make sure the Node Bot server is running. Heroku will run is as a web instance.
     - If configuring the Discord Bot on the same server as the Garry's Mod Server (i.e. it'll connect to localhost), add `-allowlocalhttp` to the srcds launch options.
 2. Install this Mod (I recommend using the [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=2155238885))
@@ -62,6 +66,28 @@ If you need a step-by-step tutorial, follow my [guide at steam](http://steamcomm
     - Connect your Steam Account with the bot by typing `!discord YourDiscordTag` in the ingame chat (E.G `!discord Manix84`).
         - If you're having trouble, try your full discord name (E.G: `!discord Manix84#8429`). This should only be necessary if there are two or more people with the same name.
     - So long as you're in correct `DISCORD_GUILD` and `DISCORD_CHANNEL`, the game state is **in progress**, you're **connected to discord** and you die in a supported GMod gamemode (TTT, TTT2 - Advanced Update, or Murder), the bot will mute you!
+
+## Docker Usage
+Currently there is no publicly hosted Docker Image so you will have to build it yourself via
+```
+docker build -t discord_gmod_bot .
+```
+To start the docker Container run
+```
+docker run --name discord_gmod_bot \
+    -p 37405:37405 \
+    -e PORT=37405 \
+    -e API_KEY="API_KEY" \
+    -e DISCORD_GUILD="DISCORD_GUILD" \
+    -e DISCORD_CHANNEL="DISCORD_CHANNEL" \
+    -e DISCORD_TOKEN="DISCORD_TOKEN" \
+    -e KEEPALIVE_HOST="KEEPALIVE_HOST" \
+    -e KEEPALIVE_PORT="KEEPALIVE_PORT" \
+    -e KEEPALIVE_METHOD="KEEPALIVE_METHOD" \
+    -e KEEPALIVE_ENABLED="KEEPALIVE_ENABLED" \
+    discord_gmod_bot
+```
+The Usage of the env variables is the same as above.
 
 ## Credits
 - Marcel Transier - The original creator of [ttt_discord_bot](https://github.com/marceltransier/ttt_discord_bot.git), from which this is based.
